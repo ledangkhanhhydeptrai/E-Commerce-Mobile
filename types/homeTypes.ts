@@ -5,3 +5,8 @@ export interface Home {
   stockStatus: string;
   image: string;
 }
+export interface HomeResponse {
+  status: number;
+  message: string;
+  data: Home[];
+}

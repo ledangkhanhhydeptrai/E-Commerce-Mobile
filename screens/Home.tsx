@@ -10,37 +10,53 @@ import {
   ActivityIndicator,
   RefreshControl
 } from "react-native";
-import { API_URL } from "@env";
 import { styleHome } from "../styles/home/home";
-import { Home } from "../types/homeTypes";
+import { Home, HomeResponse } from "../types/homeTypes";
+import { fetchBaseResponse } from "../config/api.config";
+import { AxiosError } from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function ECommerceMobile() {
   const [activeTab, setActiveTab] = React.useState<string>("home");
   const [likedItems, setLikedItems] = React.useState<Set<string>>(new Set());
   const [products, setProducts] = React.useState<Home[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [refreshing, setRefreshing] = React.useState<boolean>(false);
 
   // Fetch products from API
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/public/product`);
-      const result = await response.json();
+      const response = await fetchBaseResponse<HomeResponse>(
+        "/api/public/product",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      console.log("Response:", response);
 
-      if (result.status === 200) {
-        setProducts(result.data);
+      if (Array.isArray(response.data.data)) {
+        setProducts(response.data.data);
+      } else {
+        console.warn("API trả về không đúng format:", response);
+        setProducts([]);
       }
     } catch (error) {
-      console.error("Error fetching products:", error);
+      const errors = error as AxiosError;
+      console.log("Error", errors);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
 
-  React.useEffect(() => {
-    fetchProducts();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchProducts();
+    }, [])
+  );
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -48,7 +64,7 @@ export default function ECommerceMobile() {
   };
 
   const toggleLike = (id: string) => {
-    setLikedItems(prev => {
+    setLikedItems((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
         newSet.delete(id);
@@ -153,7 +169,7 @@ export default function ECommerceMobile() {
             showsHorizontalScrollIndicator={false}
             style={styleHome.dealsScroll}
           >
-            {deals.map(deal =>
+            {deals.map((deal) => (
               <TouchableOpacity
                 key={deal.id}
                 style={[
@@ -164,17 +180,13 @@ export default function ECommerceMobile() {
                 ]}
                 activeOpacity={0.8}
               >
-                <Text style={styleHome.dealTitle}>
-                  {deal.title}
-                </Text>
-                <Text style={styleHome.dealDiscount}>
-                  {deal.discount}
-                </Text>
+                <Text style={styleHome.dealTitle}>{deal.title}</Text>
+                <Text style={styleHome.dealDiscount}>{deal.discount}</Text>
                 <View style={styleHome.dealButton}>
                   <Text style={styleHome.dealButtonText}>Xem ngay →</Text>
                 </View>
               </TouchableOpacity>
-            )}
+            ))}
           </ScrollView>
         </View>
 
@@ -182,7 +194,7 @@ export default function ECommerceMobile() {
         <View style={styleHome.section}>
           <Text style={styleHome.sectionTitle}>Danh mục</Text>
           <View style={styleHome.categoriesGrid}>
-            {categories.map(cat =>
+            {categories.map((cat) => (
               <TouchableOpacity
                 key={cat.id}
                 style={styleHome.categoryItem}
@@ -196,15 +208,11 @@ export default function ECommerceMobile() {
                     }
                   ]}
                 >
-                  <Text style={styleHome.categoryEmoji}>
-                    {cat.emoji}
-                  </Text>
+                  <Text style={styleHome.categoryEmoji}>{cat.emoji}</Text>
                 </View>
-                <Text style={styleHome.categoryName}>
-                  {cat.name}
-                </Text>
+                <Text style={styleHome.categoryName}>{cat.name}</Text>
               </TouchableOpacity>
-            )}
+            ))}
           </View>
         </View>
 
@@ -217,88 +225,88 @@ export default function ECommerceMobile() {
             </TouchableOpacity>
           </View>
 
-          {loading
-            ? <View style={styleHome.loadingContainer}>
-                <ActivityIndicator size="large" color="#F59E0B" />
-                <Text style={styleHome.loadingText}>Đang tải sản phẩm...</Text>
-              </View>
-            : products.length === 0
-              ? <View style={styleHome.emptyContainer}>
-                  <Text style={styleHome.emptyText}>Không có sản phẩm nào</Text>
-                </View>
-              : <View style={styleHome.productsGrid}>
-                  {products.map(product => {
-                    const stockInfo = getStockStatus(product.stockStatus);
+          {loading ? (
+            <View style={styleHome.loadingContainer}>
+              <ActivityIndicator size="large" color="#F59E0B" />
+              <Text style={styleHome.loadingText}>Đang tải sản phẩm...</Text>
+            </View>
+          ) : products.length === 0 ? (
+            <View style={styleHome.emptyContainer}>
+              <Text style={styleHome.emptyText}>Không có sản phẩm nào</Text>
+            </View>
+          ) : (
+            <View style={styleHome.productsGrid}>
+              {products.map((product) => {
+                const stockInfo = getStockStatus(product.stockStatus);
 
-                    return (
-                      <TouchableOpacity
-                        key={product.id}
-                        style={styleHome.productCard}
-                        activeOpacity={0.8}
+                return (
+                  <TouchableOpacity
+                    key={product.id}
+                    style={styleHome.productCard}
+                    activeOpacity={0.8}
+                  >
+                    {/* Product Image Area */}
+                    <View style={styleHome.productImageContainer}>
+                      {/* Stock Status Tag */}
+                      <View
+                        style={[
+                          styleHome.productTag,
+                          { backgroundColor: stockInfo.color }
+                        ]}
                       >
-                        {/* Product Image Area */}
-                        <View style={styleHome.productImageContainer}>
-                          {/* Stock Status Tag */}
-                          <View
-                            style={[
-                              styleHome.productTag,
-                              { backgroundColor: stockInfo.color }
-                            ]}
-                          >
-                            <Text style={styleHome.productTagText}>
-                              {stockInfo.text}
-                            </Text>
-                          </View>
+                        <Text style={styleHome.productTagText}>
+                          {stockInfo.text}
+                        </Text>
+                      </View>
 
-                          {/* Like Button */}
-                          <TouchableOpacity
-                            style={styleHome.likeButton}
-                            onPress={() => toggleLike(product.id)}
-                            activeOpacity={0.7}
-                          >
-                            <Text style={styleHome.likeIcon}>
-                              {likedItems.has(product.id) ? "❤️" : "🤍"}
-                            </Text>
-                          </TouchableOpacity>
-
-                          {/* Product Image */}
-                          <Image
-                            source={{ uri: product.image }}
-                            style={styleHome.productImage}
-                            resizeMode="contain"
-                          />
-                        </View>
-
-                        {/* Product Info */}
-                        <View style={styleHome.productInfo}>
-                          <Text style={styleHome.productName} numberOfLines={2}>
-                            {product.name}
-                          </Text>
-
-                          {/* Price */}
-                          <View style={styleHome.productFooter}>
-                            <View>
-                              <Text style={styleHome.productPrice}>
-                                {formatPrice(product.price)}
-                              </Text>
-                            </View>
-                            <TouchableOpacity
-                              style={styleHome.addButton}
-                              activeOpacity={0.8}
-                              disabled={product.stockStatus === "OUT_OF_STOCK"}
-                            >
-                              <Text style={styleHome.addButtonText}>
-                                {product.stockStatus === "OUT_OF_STOCK"
-                                  ? "×"
-                                  : "+"}
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
+                      {/* Like Button */}
+                      <TouchableOpacity
+                        style={styleHome.likeButton}
+                        onPress={() => toggleLike(product.id)}
+                        activeOpacity={0.7}
+                      >
+                        <Text style={styleHome.likeIcon}>
+                          {likedItems.has(product.id) ? "❤️" : "🤍"}
+                        </Text>
                       </TouchableOpacity>
-                    );
-                  })}
-                </View>}
+
+                      {/* Product Image */}
+                      <Image
+                        source={{ uri: product.image }}
+                        style={styleHome.productImage}
+                        resizeMode="contain"
+                      />
+                    </View>
+
+                    {/* Product Info */}
+                    <View style={styleHome.productInfo}>
+                      <Text style={styleHome.productName} numberOfLines={2}>
+                        {product.name}
+                      </Text>
+
+                      {/* Price */}
+                      <View style={styleHome.productFooter}>
+                        <View>
+                          <Text style={styleHome.productPrice}>
+                            {formatPrice(product.price)}
+                          </Text>
+                        </View>
+                        <TouchableOpacity
+                          style={styleHome.addButton}
+                          activeOpacity={0.8}
+                          disabled={product.stockStatus === "OUT_OF_STOCK"}
+                        >
+                          <Text style={styleHome.addButtonText}>
+                            {product.stockStatus === "OUT_OF_STOCK" ? "×" : "+"}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -309,7 +317,7 @@ export default function ECommerceMobile() {
           { icon: "📱", label: "Danh mục", id: "categories" },
           { icon: "🔔", label: "Thông báo", id: "offers" },
           { icon: "👤", label: "Tài khoản", id: "profile" }
-        ].map(item =>
+        ].map((item) => (
           <TouchableOpacity
             key={item.id}
             style={styleHome.navItem}
@@ -333,7 +341,7 @@ export default function ECommerceMobile() {
               {item.label}
             </Text>
           </TouchableOpacity>
-        )}
+        ))}
       </View>
     </View>
   );
