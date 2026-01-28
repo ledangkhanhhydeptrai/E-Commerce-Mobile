@@ -54,19 +54,20 @@ const Navigation: React.FC = () => {
         tabBarInactiveTintColor: "#888"
       })}
     >
-      {screens
-        .filter((s) => s.isTab)
-        .map((screen) => (
-          <Tab.Screen
-            key={screen.name}
-            name={screen.name}
-            component={screen.component}
-            options={{
-              tabBarLabel: screen.label,
-              tabBarIcon: () => <Text>{screen.icon}</Text>
-            }}
-          />
-        ))}
+      {screens.filter(s => s.isTab).map(screen =>
+        <Tab.Screen
+          key={screen.name}
+          name={screen.name}
+          component={screen.component}
+          options={{
+            tabBarLabel: screen.label,
+            tabBarIcon: () =>
+              <Text>
+                {screen.icon}
+              </Text>
+          }}
+        />
+      )}
     </Tab.Navigator>
   );
 };

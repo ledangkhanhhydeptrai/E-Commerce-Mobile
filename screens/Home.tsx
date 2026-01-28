@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  TextInput,
   TouchableOpacity,
   StatusBar,
   Image,
@@ -15,6 +14,7 @@ import { Home, HomeResponse } from "../types/homeTypes";
 import { fetchBaseResponse } from "../config/api.config";
 import { AxiosError } from "axios";
 import { useFocusEffect } from "@react-navigation/native";
+import Header from "../components/Header";
 
 export default function ECommerceMobile() {
   const [activeTab, setActiveTab] = React.useState<string>("home");
@@ -122,7 +122,7 @@ export default function ECommerceMobile() {
   return (
     <View style={styleHome.container}>
       <StatusBar barStyle="light-content" />
-
+      <Header />
       <ScrollView
         style={styleHome.scrollView}
         showsVerticalScrollIndicator={false}
@@ -134,34 +134,6 @@ export default function ECommerceMobile() {
           />
         }
       >
-        {/* Header */}
-        <View style={styleHome.header}>
-          <View style={styleHome.headerContent}>
-            <View>
-              <Text style={styleHome.headerTitle}>Tech Store</Text>
-              <Text style={styleHome.headerSubtitle}>Công nghệ hàng đầu</Text>
-            </View>
-            <View style={styleHome.cartContainer}>
-              <View style={styleHome.cartIcon}>
-                <Text style={styleHome.cartEmoji}>🛒</Text>
-              </View>
-              <View style={styleHome.cartBadge}>
-                <Text style={styleHome.cartBadgeText}>3</Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Search Bar */}
-          <View style={styleHome.searchContainer}>
-            <Text style={styleHome.searchIcon}>🔍</Text>
-            <TextInput
-              style={styleHome.searchInput}
-              placeholder="Tìm kiếm sản phẩm..."
-              placeholderTextColor="rgba(255, 255, 255, 0.6)"
-            />
-          </View>
-        </View>
-
         {/* Flash Deals */}
         <View style={styleHome.section}>
           <ScrollView
