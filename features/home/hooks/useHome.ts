@@ -12,7 +12,7 @@ export default function useHome() {
   useFocusEffect(
     React.useCallback(() => {
       dispatch(homeRequest());
-    }, [])
+    }, [dispatch])
   );
   return {
     data,

@@ -1,3 +1,5 @@
-export const RootStackParamList = {
-  Home: undefined
+export type RootStackParamList = {
+  Tabs: undefined;
+  Home: undefined;
+  Detail: { id: string };
 };

@@ -1,33 +1,26 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { screens } from "../screens";
+
 import CustomTabBar from "./CustomTabBar";
+import { tabScreens } from "../rootStack/tabScreens";
+import { TabParamList } from "../rootStackParamList/TabParamList";
+import ECommerceMobile from "../screens/home/Home";
+import PhoneDetail from "../screens/detail/phoneDetail";
+const Tab = createBottomTabNavigator<TabParamList>();
 
-const Tab = createBottomTabNavigator();
-
-// Custom Tab Bar Component
-
-export const Navigation: React.FC = () => {
+export const Tabs = () => {
   return (
     <Tab.Navigator
       tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false
-      }}
+      screenOptions={{ headerShown: false }}
     >
-      {screens
-        .filter((s) => s.isTab)
-        .map((screen) => (
-          <Tab.Screen
-            key={screen.name}
-            name={screen.name}
-            component={screen.component}
-            options={{
-              tabBarLabel: screen.label
-            }}
-          />
-        ))}
+      <Tab.Screen name="Home" component={ECommerceMobile} />
+      <Tab.Screen
+        name="Detail"
+        component={PhoneDetail}
+        options={{
+          tabBarStyle: { display: "none" }
+        }} // ❗ Ẩn tab
+      />
     </Tab.Navigator>
   );
 };
