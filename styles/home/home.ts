@@ -1,325 +1,389 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 const { width } = Dimensions.get("window");
-export const styleHome = StyleSheet.create({
+const CARD_WIDTH = (width - 40) / 2;
+
+// 🎨 PURPLE PREMIUM COLOR PALETTE
+const COLORS = {
+  // Primary
+  violet: "#8B5CF6",
+  purple: "#A855F7",
+  deepPurple: "#7C3AED",
+  
+  // Accents
+  hotPink: "#EC4899",
+  fuchsia: "#D946EF",
+  cyan: "#06B6D4",
+  skyBlue: "#38BDF8",
+  
+  // Status
+  success: "#10B981",
+  warning: "#F59E0B",
+  danger: "#EF4444",
+  
+  // Backgrounds
+  darkBase: "#0A0A0F",
+  darkSurface: "#1A1A24",
+  darkElevated: "#25253A",
+  
+  // Text
+  textPrimary: "#FFFFFF",
+  textSecondary: "#A1A1AA",
+  textTertiary: "#71717A"
+};
+
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FAF9F6"
+    backgroundColor: COLORS.darkBase
   },
+  
   scrollView: {
     flex: 1
   },
-
-  // Header Styles
-  header: {
-    backgroundColor: "#1E293B",
-    paddingTop: 60,
-    paddingBottom: 24,
-    paddingHorizontal: 24,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32
+  
+  content: {
+    paddingTop: 20
   },
-  headerContent: {
+
+  // PROMO BANNER
+  promoBanner: {
+    marginHorizontal: 20,
+    marginBottom: 24,
+    borderRadius: 24,
+    overflow: "hidden",
+    backgroundColor: COLORS.darkSurface,
+    borderWidth: 1,
+    borderColor: "rgba(139, 92, 246, 0.2)"
+  },
+  
+  promoGradient: {
+    padding: 24,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 24
+    backgroundColor: COLORS.violet
   },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: "700",
-    color: "#FFFFFF",
+  
+  promoContent: {
+    flex: 1
+  },
+  
+  promoTitle: {
+    fontSize: 24,
+    fontWeight: "800",
+    color: "#FFF",
+    marginBottom: 4,
     letterSpacing: -0.5
   },
-  headerSubtitle: {
-    fontSize: 14,
-    color: "#FCD34D",
-    marginTop: 4
-  },
-  cartContainer: {
-    position: "relative"
-  },
-  cartIcon: {
-    width: 48,
-    height: 48,
-    backgroundColor: "#FB923C",
-    borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  cartEmoji: {
-    fontSize: 24
-  },
-  cartBadge: {
-    position: "absolute",
-    top: -4,
-    right: -4,
-    width: 20,
-    height: 20,
-    backgroundColor: "#EF4444",
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  cartBadgeText: {
-    color: "#FFFFFF",
-    fontSize: 11,
-    fontWeight: "700"
-  },
-
-  // Search Bar
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.2)"
-  },
-  searchIcon: {
+  
+  promoSubtitle: {
     fontSize: 18,
-    marginRight: 12
+    fontWeight: "600",
+    color: "#FFF",
+    marginBottom: 4,
+    opacity: 0.95
   },
-  searchInput: {
-    flex: 1,
-    color: "#FFFFFF",
-    fontSize: 15
+  
+  promoDescription: {
+    fontSize: 13,
+    color: "rgba(255, 255, 255, 0.8)",
+    marginBottom: 16
+  },
+  
+  promoButton: {
+    backgroundColor: "#FFF",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignSelf: "flex-start",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8
+  },
+  
+  promoButtonText: {
+    color: COLORS.violet,
+    fontSize: 15,
+    fontWeight: "700",
+    letterSpacing: 0.5
+  },
+  
+  promoImageContainer: {
+    width: 80,
+    height: 80,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  
+  promoEmoji: {
+    fontSize: 64
   },
 
-  // Section
+  // SECTIONS
   section: {
-    paddingHorizontal: 24,
-    paddingVertical: 24
+    marginBottom: 24
   },
+  
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingHorizontal: 20,
     marginBottom: 16
   },
+  
   sectionTitle: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#1E293B"
+    color: COLORS.textPrimary,
+    letterSpacing: -0.5
   },
-  seeAllText: {
-    fontSize: 14,
-    color: "#F59E0B",
-    fontWeight: "600"
-  },
-
-  // Deals
-  dealsScroll: {
-    marginHorizontal: -24,
-    paddingHorizontal: 24
-  },
-  dealCard: {
-    width: 200,
-    padding: 20,
-    borderRadius: 20,
-    marginRight: 12
-  },
-  dealTitle: {
-    fontSize: 14,
-    color: "#FFFFFF",
-    fontWeight: "600",
-    opacity: 0.9
-  },
-  dealDiscount: {
-    fontSize: 24,
-    color: "#FFFFFF",
-    fontWeight: "700",
+  
+  sectionSubtitle: {
+    fontSize: 13,
+    color: COLORS.textTertiary,
     marginTop: 4
   },
-  dealButton: {
-    marginTop: 12,
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    alignSelf: "flex-start"
-  },
-  dealButtonText: {
-    color: "#FFFFFF",
-    fontSize: 12,
+  
+  seeAllText: {
+    fontSize: 14,
+    color: COLORS.violet,
     fontWeight: "600"
   },
-
-  // Categories
-  categoriesGrid: {
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  categoryItem: {
+  
+  viewModeButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    justifyContent: "center",
     alignItems: "center",
-    width: (width - 72) / 4
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)"
   },
-  categoryIcon: {
-    width: "100%",
-    aspectRatio: 1,
+  
+  viewModeIcon: {
+    fontSize: 18,
+    color: COLORS.textSecondary
+  },
+
+  // CATEGORIES
+  categoriesContainer: {
+    paddingHorizontal: 20
+  },
+  
+  categoryCard: {
+    alignItems: "center",
+    width: 90
+  },
+  
+  categoryIconContainer: {
+    width: 72,
+    height: 72,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 8
+    marginBottom: 8,
+    shadowColor: COLORS.violet,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)"
   },
-  categoryEmoji: {
-    fontSize: 36
+  
+  categoryIcon: {
+    fontSize: 32
   },
+  
   categoryName: {
-    fontSize: 12,
-    color: "#475569",
+    fontSize: 13,
     fontWeight: "600",
+    color: COLORS.textPrimary,
     textAlign: "center"
   },
 
-  // Loading & Empty States
-  loadingContainer: {
-    paddingVertical: 60,
-    alignItems: "center"
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 14,
-    color: "#64748B"
-  },
-  emptyContainer: {
-    paddingVertical: 60,
-    alignItems: "center"
-  },
-  emptyText: {
-    fontSize: 14,
-    color: "#64748B"
-  },
-
-  // Products
+  // PRODUCTS GRID
   productsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between"
+    paddingHorizontal: 20
   },
+  
   productCard: {
-    width: (width - 60) / 2,
-    backgroundColor: "#FFFFFF",
+    width: CARD_WIDTH,
+    backgroundColor: COLORS.darkSurface,
     borderRadius: 20,
     marginBottom: 16,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "#F1F5F9",
-    elevation: 2,
+    borderColor: "rgba(139, 92, 246, 0.1)",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8
   },
-  productImageContainer: {
-    position: "relative",
-    backgroundColor: "#FFFFFF",
-    height: 180
+  
+  productImageDisabled: {
+    opacity: 0.5
   },
-  productTag: {
+
+  // STOCK BADGE
+  stockBadge: {
     position: "absolute",
     top: 12,
     left: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    zIndex: 2
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 5,
+    zIndex: 10
   },
-  productTagText: {
-    color: "#FFFFFF",
-    fontSize: 10,
-    fontWeight: "700"
+  
+  stockBadgeText: {
+    color: "#FFF",
+    fontSize: 11,
+    fontWeight: "700",
+    letterSpacing: 0.5
   },
+
+  // LIKE BUTTON
   likeButton: {
     position: "absolute",
     top: 12,
     right: 12,
     width: 36,
     height: 36,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
     borderRadius: 18,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 2
+    zIndex: 10,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.1)"
   },
+  
   likeIcon: {
     fontSize: 18
   },
-  productImage: {
-    width: "100%",
-    height: "100%"
+
+  // OUT OF STOCK
+  outOfStockOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center"
   },
+  
+  outOfStockText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "800",
+    letterSpacing: 2
+  },
+
+  // PRODUCT INFO
   productInfo: {
     padding: 16
   },
+  
   productName: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "600",
-    color: "#1E293B",
+    color: COLORS.textPrimary,
     marginBottom: 12,
-    minHeight: 40
+    lineHeight: 20,
+    height: 40
   },
+  
   productFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"
   },
+  
+  priceContainer: {
+    flex: 1
+  },
+  
   productPrice: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: "#EF4444"
-  },
-  addButton: {
-    width: 32,
-    height: 32,
-    backgroundColor: "#FB923C",
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  addButtonText: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: "700"
+    fontSize: 17,
+    fontWeight: "800",
+    color: COLORS.violet,
+    letterSpacing: -0.5
   },
 
-  // Bottom Navigation
-  bottomNav: {
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    borderTopWidth: 1,
-    borderTopColor: "#E2E8F0",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    elevation: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4
+  // ADD TO CART BUTTON
+  addToCartButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: COLORS.violet,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "rgba(139, 92, 246, 0.5)",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 8
   },
-  navItem: {
-    flex: 1,
+  
+  addToCartButtonDisabled: {
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    shadowOpacity: 0
+  },
+  
+  addToCartIcon: {
+    fontSize: 20
+  },
+
+  // LOADING & EMPTY STATES
+  loadingContainer: {
+    paddingVertical: 60,
     alignItems: "center"
   },
-  navIcon: {
-    fontSize: 24,
-    marginBottom: 4
+  
+  loadingText: {
+    marginTop: 16,
+    fontSize: 15,
+    color: COLORS.textTertiary,
+    fontWeight: "500"
   },
-  navIconActive: {
-    transform: [{ scale: 1.1 }]
+  
+  emptyContainer: {
+    paddingVertical: 60,
+    alignItems: "center",
+    paddingHorizontal: 40
   },
-  navLabel: {
-    fontSize: 11,
-    color: "#94A3B8",
-    fontWeight: "600"
+  
+  emptyEmoji: {
+    fontSize: 64,
+    marginBottom: 16
   },
-  navLabelActive: {
-    color: "#F59E0B"
+  
+  emptyText: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: COLORS.textPrimary,
+    marginBottom: 8,
+    textAlign: "center"
+  },
+  
+  emptySubtext: {
+    fontSize: 14,
+    color: COLORS.textTertiary,
+    textAlign: "center"
   }
 });
