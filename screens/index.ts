@@ -1,4 +1,4 @@
-import ECommerceMobile from "./Home";
+import ECommerceMobile from "./home/Home";
 
 export const screens = [
   {
