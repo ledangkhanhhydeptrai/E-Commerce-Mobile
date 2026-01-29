@@ -10,3 +10,8 @@ export interface HomeResponse {
   message: string;
   data: Home[];
 }
+export interface HomeResponseForId {
+  status: number;
+  message: string;
+  data: Home | null;
+}

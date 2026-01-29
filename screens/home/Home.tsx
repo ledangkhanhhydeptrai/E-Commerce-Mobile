@@ -11,8 +11,15 @@ import {
 import { styles } from "../../styles/home/home";
 import Header from "../../components/Header/Header";
 import useHome from "../../features/home/hooks/useHome";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../rootStackParamList/RootStackParamList";
+import { useNavigation } from "@react-navigation/native";
 
+type HomeNavigationProp =
+  NativeStackNavigationProp<RootStackParamList>;
 export default function ECommerceMobile() {
+  const navigation = useNavigation<HomeNavigationProp>();
+
   const [likedItems, setLikedItems] = React.useState<Set<string>>(new Set());
   const { data, loading, error } = useHome();
   const [refreshing, setRefreshing] = React.useState<boolean>(false);
@@ -144,6 +151,7 @@ export default function ECommerceMobile() {
                 {data.map((product, index) => {
                   const stockInfo = getStockStatus(product.stockStatus);
                   const isOutOfStock = product.stockStatus === "OUT_OF_STOCK";
+                  console.log("ID trước khi navigate:", product.id);
 
                   return (
                     <TouchableOpacity
@@ -153,6 +161,9 @@ export default function ECommerceMobile() {
                         { marginRight: index % 2 === 0 ? 12 : 0 }
                       ]}
                       activeOpacity={0.9}
+                      onPress={() =>
+                        navigation.navigate("Detail", { id: product.id })
+                      }
                     >
                       {/* Product Image */}
                       <View

@@ -10,7 +10,9 @@ type Props = {
 export default function AppProvider({ children }: Props) {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Provider store={store}>{children}</Provider>
+      <Provider store={store}>
+        {children}
+      </Provider>
     </GestureHandlerRootView>
   );
 }

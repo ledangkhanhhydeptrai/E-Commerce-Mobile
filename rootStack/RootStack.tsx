@@ -1,18 +1,17 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { screens } from "../screens";
-const Stack = createNativeStackNavigator();
-const RootStack: React.FC = () => {
+import { RootStackParamList } from "../rootStackParamList/RootStackParamList";
+import { Tabs } from "../navigation/Navigation";
+import PhoneDetail from "../screens/detail/phoneDetail";
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const RootStack = () => {
   return (
-    <Stack.Navigator>
-      {screens.map((screen) => (
-        <Stack.Screen
-          key={screen.name}
-          name={screen.name}
-          component={screen.component}
-          options={{ headerShown: false }} // ✅ boolean
-        />
-      ))}
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Tabs" component={Tabs} />
+
+      <Stack.Screen name="Detail" component={PhoneDetail} />
     </Stack.Navigator>
   );
 };
