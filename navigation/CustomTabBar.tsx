@@ -1,57 +1,71 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import styles from "./style";
-import { screens } from "../screens";
+import { Text, TouchableOpacity, View } from "react-native";
+import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-const CustomTabBar = ({ state, descriptors, navigation }: any) => {
+import styles from "./style";
+import { TabParamList } from "../rootStackParamList/TabParamList";
+
+type TabName = keyof TabParamList;
+
+const TAB_CONFIG: Record<
+  TabName,
+  {
+    icon: string;
+    colors: {
+      primary: string;
+      glow: string;
+      gradient: [string, string];
+    };
+  }
+> = {
+  Home: {
+    icon: "📱",
+    colors: {
+      primary: "#F59E0B",
+      glow: "rgba(245, 158, 11, 0.4)",
+      gradient: ["#F59E0B", "#D97706"]
+    }
+  },
+  Detail: {
+    icon: "🔍",
+    colors: {
+      primary: "#3B82F6",
+      glow: "rgba(59, 130, 246, 0.4)",
+      gradient: ["#3B82F6", "#1D4ED8"]
+    }
+  },
+  About: {
+    icon: "ℹ️",
+    colors: {
+      primary: "#8B5CF6",
+      glow: "rgba(139, 92, 246, 0.4)",
+      gradient: ["#8B5CF6", "#6D28D9"]
+    }
+  }
+};
+
+const CustomTabBar: React.FC<BottomTabBarProps> = ({
+  state,
+  descriptors,
+  navigation
+}) => {
   return (
     <View style={styles.tabBarContainer}>
-      {/* Gradient Overlay */}
       <View style={styles.tabBarGradient} />
 
       <View style={styles.tabBarInner}>
-        {state.routes.map((route: any, index: number) => {
+        {state.routes.map((route, index) => {
+          const tabName = route.name as TabName;
+
+          const config = TAB_CONFIG[tabName];
+
           const { options } = descriptors[route.key];
-          const label = options.tabBarLabel ?? route.name;
+          const label =
+            options.tabBarLabel ??
+            options.title ??
+            tabName;
+
           const isFocused = state.index === index;
-
-          // Get screen config
-          const screenConfig = screens.find((s) => s.name === route.name);
-          const icon = screenConfig?.icon || "📱";
-
-          // Color scheme per tab
-          const tabColors: Record<
-            string,
-            { primary: string; glow: string; gradient: [string, string] }
-          > = {
-            Home: {
-              primary: "#F59E0B",
-              glow: "rgba(245, 158, 11, 0.4)",
-              gradient: ["#F59E0B", "#D97706"]
-            },
-            Categories: {
-              primary: "#8B5CF6",
-              glow: "rgba(139, 92, 246, 0.4)",
-              gradient: ["#8B5CF6", "#7C3AED"]
-            },
-            Cart: {
-              primary: "#EF4444",
-              glow: "rgba(239, 68, 68, 0.4)",
-              gradient: ["#EF4444", "#DC2626"]
-            },
-            Favorite: {
-              primary: "#EC4899",
-              glow: "rgba(236, 72, 153, 0.4)",
-              gradient: ["#EC4899", "#DB2777"]
-            },
-            Profile: {
-              primary: "#3B82F6",
-              glow: "rgba(59, 130, 246, 0.4)",
-              gradient: ["#3B82F6", "#2563EB"]
-            }
-          };
-
-          const colors = tabColors[route.name] || tabColors.Home;
 
           const onPress = () => {
             const event = navigation.emit({
@@ -61,7 +75,7 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
             });
 
             if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
+              navigation.navigate(tabName);
             }
           };
 
@@ -78,34 +92,31 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
               accessibilityRole="button"
               accessibilityState={isFocused ? { selected: true } : {}}
               accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
               style={styles.tabItem}
               activeOpacity={0.7}
             >
-              {/* Active Indicator */}
               {isFocused && (
                 <View
                   style={[
                     styles.activeIndicator,
                     {
-                      backgroundColor: colors.primary,
-                      shadowColor: colors.glow
+                      backgroundColor: config.colors.primary,
+                      shadowColor: config.colors.glow
                     }
                   ]}
                 />
               )}
 
-              {/* Icon Container */}
               <View
                 style={[
                   styles.iconContainer,
                   isFocused && {
-                    backgroundColor: `${colors.primary}20`,
+                    backgroundColor: `${config.colors.primary}20`,
                     borderWidth: 1,
-                    borderColor: `${colors.primary}30`,
-                    shadowColor: colors.glow,
+                    borderColor: `${config.colors.primary}30`,
+                    shadowColor: config.colors.glow,
                     shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 1,
                     shadowRadius: 12,
@@ -122,30 +133,31 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
                     }
                   ]}
                 >
-                  {icon}
+                  {config.icon}
                 </Text>
               </View>
 
-              {/* Label */}
               <Text
                 style={[
                   styles.labelText,
                   {
-                    color: isFocused ? colors.primary : "#666",
+                    color: isFocused
+                      ? config.colors.primary
+                      : "#666",
                     fontWeight: isFocused ? "700" : "500",
                     marginTop: isFocused ? 6 : 4
                   }
                 ]}
               >
-                {label}
+                {typeof label === "function"
+                  ? label({
+                      focused: isFocused,
+                      color: isFocused ? config.colors.primary : "#666",
+                      position: "below-icon",
+                      children: tabName
+                    })
+                  : label}
               </Text>
-
-              {/* Badge for Cart (example) */}
-              {route.name === "Cart" && (
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>3</Text>
-                </View>
-              )}
             </TouchableOpacity>
           );
         })}
